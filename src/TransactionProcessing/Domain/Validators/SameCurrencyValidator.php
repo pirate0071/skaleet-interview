@@ -4,6 +4,7 @@ namespace Skaleet\Interview\TransactionProcessing\Domain\Validators;
 
 use Skaleet\Interview\TransactionProcessing\Domain\Exception\NotSameCurrencyException;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\Amount;
+use Webmozart\Assert\Assert;
 
 class SameCurrencyValidator extends AbstractTransactionValidator
 {
@@ -13,8 +14,6 @@ class SameCurrencyValidator extends AbstractTransactionValidator
 
     protected function doValidation(): void
     {
-        if ($this->amount->currency !== $this->currency) {
-            throw new NotSameCurrencyException($this->amount->currency, $this->currency);
-        }
+        Assert::same($this->amount->currency, $this->currency, 'Transaction failed: transaction currency mismatch.');
     }
 }

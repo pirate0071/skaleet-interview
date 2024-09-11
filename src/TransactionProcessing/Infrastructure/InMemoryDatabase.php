@@ -2,12 +2,13 @@
 
 namespace Skaleet\Interview\TransactionProcessing\Infrastructure;
 
-use Skaleet\Interview\TransactionProcessing\Domain\AccountRegistry;
 use Skaleet\Interview\TransactionProcessing\Domain\Exception\AccountDoesNotExistException;
+use Skaleet\Interview\TransactionProcessing\Domain\Exception\AccountNotFoundException;
 use Skaleet\Interview\TransactionProcessing\Domain\Model;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\Account;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\TransactionLog;
-use Skaleet\Interview\TransactionProcessing\Domain\TransactionRepository;
+use Skaleet\Interview\TransactionProcessing\Domain\Repository\AccountRegistry;
+use Skaleet\Interview\TransactionProcessing\Domain\Repository\TransactionRepository;
 
 class InMemoryDatabase implements TransactionRepository, AccountRegistry
 {

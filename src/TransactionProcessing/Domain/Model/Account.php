@@ -22,4 +22,9 @@ class Account
         $this->balance = new Amount($this->balance->value + $amount->value, $amount->currency);
         return $this->balance;
     }
+
+    public function getBalance(): Amount
+    {
+        return $this->balance;
+    }
 }

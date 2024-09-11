@@ -5,6 +5,7 @@ namespace Skaleet\Interview\TransactionProcessing\Domain\Validators;
 use Skaleet\Interview\TransactionProcessing\Domain\Exception\InsufisantFundsException;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\Account;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\Amount;
+use Webmozart\Assert\Assert;
 
 class ClientDebitedValidator extends AbstractTransactionValidator
 {
@@ -14,8 +15,6 @@ class ClientDebitedValidator extends AbstractTransactionValidator
 
     protected function doValidation(): void
     {
-        if (($this->clientAccount->balance->value - $this->amount->value) <= 0) {
-            throw new InsufisantFundsException($this->clientAccount->number);
-        }
+        Assert::greaterThan($this->clientAccount->balance->value, $this->amount->value, "Transaction failed: insufficient fund on account #" . $this->clientAccount->number);
     }
 }

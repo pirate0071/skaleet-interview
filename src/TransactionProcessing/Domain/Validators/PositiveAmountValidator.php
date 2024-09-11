@@ -4,6 +4,7 @@ namespace Skaleet\Interview\TransactionProcessing\Domain\Validators;
 
 use Skaleet\Interview\TransactionProcessing\Domain\Exception\NegativeAmountException;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\Amount;
+use Webmozart\Assert\Assert;
 
 class PositiveAmountValidator extends AbstractTransactionValidator
 {
@@ -14,8 +15,6 @@ class PositiveAmountValidator extends AbstractTransactionValidator
 
     protected function doValidation(): void
     {
-        if ($this->amount->value <= 0) {
-            throw new NegativeAmountException();
-        }
+        Assert::positiveInteger($this->amount->value, "Transaction Failed: transaction amount should be positive.");
     }
 }

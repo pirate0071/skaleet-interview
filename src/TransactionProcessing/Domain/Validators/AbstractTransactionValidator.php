@@ -16,9 +16,7 @@ abstract class AbstractTransactionValidator implements TransactionValidatorInter
     {
         $this->doValidation();
 
-        if ($this->nextValidator) {
-            $this->nextValidator->validate();
-        }
+        $this->nextValidator?->validate();
     }
 
     abstract protected function doValidation(): void;

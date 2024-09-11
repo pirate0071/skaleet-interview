@@ -2,12 +2,15 @@
 
 use DI\Container;
 use Skaleet\Interview\TransactionProcessing\Application\Command\PayByCardCommandHandler;
-use Skaleet\Interview\TransactionProcessing\Domain\AccountRegistry;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\Account;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\AccountingEntry;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\Amount;
 use Skaleet\Interview\TransactionProcessing\Domain\Model\TransactionLog;
-use Skaleet\Interview\TransactionProcessing\Domain\TransactionRepository;
+use Skaleet\Interview\TransactionProcessing\Domain\Repository\AccountRegistry;
+use Skaleet\Interview\TransactionProcessing\Domain\Repository\FeeConfigRepository;
+use Skaleet\Interview\TransactionProcessing\Domain\Repository\TransactionRepository;
+use Skaleet\Interview\TransactionProcessing\Domain\Service\FeeCalculatorService;
+use Skaleet\Interview\TransactionProcessing\Domain\Service\TransactionService;
 use Skaleet\Interview\TransactionProcessing\Infrastructure\ExistingAccounts;
 use Skaleet\Interview\TransactionProcessing\Infrastructure\PersistentDatabase;
 use Skaleet\Interview\Util\Locator;
@@ -51,10 +54,14 @@ $container->set(PersistentDatabase::class, function () {
 $container->set(AccountRegistry::class, fn(Container $container) => $container->get(PersistentDatabase::class));
 $container->set(TransactionRepository::class, fn(Container $container) => $container->get(PersistentDatabase::class));
 
+$container->set(TransactionService::class, fn(Container $container) => new TransactionService());
+$container->set(FeeCalculatorService::class, fn(Container $container) => new FeeCalculatorService());
 
 $container->set(PayByCardCommandHandler::class, function (Container $container) {
     return new PayByCardCommandHandler(
             $container->get(TransactionRepository::class),
             $container->get(AccountRegistry::class),
+            $container->get(TransactionService::class),
+            $container->get(FeeCalculatorService::class)
     );
 });
